@@ -1,8 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'student.dart';
-import 'teacher.dart';
+import 'admin.dart';
+import 'customer.dart';
+import 'cook.dart';
 import 'register.dart';
 
 class LoginPage extends StatefulWidget {
@@ -26,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           children: <Widget>[
             Container(
-              color: Colors.orangeAccent[700],
+              color: Colors.redAccent.shade100,
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               child: Center(
@@ -134,7 +135,6 @@ class _LoginPageState extends State<LoginPage> {
                           },
                           keyboardType: TextInputType.emailAddress,
                         ),
-
                         SizedBox(
                           height: 20,
                         ),
@@ -182,8 +182,9 @@ class _LoginPageState extends State<LoginPage> {
                                 child: Text(
                                   'Sign up',
                                   style: TextStyle(
-                                      color: Colors.blue,
-                                      ),
+                                    decoration: TextDecoration.underline,
+                                    color: Colors.white,
+                                  ),
                                 ),
                                 onTap: () {
                                   Navigator.pushReplacement(
@@ -217,18 +218,25 @@ class _LoginPageState extends State<LoginPage> {
         .get()
         .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
-        if (documentSnapshot.get('role') == "Teacher") {
+        if (documentSnapshot.get('role') == "Customer") {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => Teacher(),
+              builder: (context) => Customer(email: emailController.text),
+            ),
+          );
+        } else if (documentSnapshot.get('role') == "Admin") {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => Admin(email: emailController.text),
             ),
           );
         } else {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => Student(),
+              builder: (context) => Cook(email: emailController.text),
             ),
           );
         }

@@ -38,12 +38,11 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.orange[900],
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
             Container(
-              color: Colors.orangeAccent[700],
+              color: Colors.redAccent.shade100,
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               child: SingleChildScrollView(
@@ -56,7 +55,7 @@ class _RegisterState extends State<Register> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(
-                          height: 80,
+                          height: 160,
                         ),
                         Text(
                           "Register Now",
@@ -205,7 +204,7 @@ class _RegisterState extends State<Register> {
                               ),
                             ),
                             DropdownButton<String>(
-                              dropdownColor: Colors.blue[900],
+                              dropdownColor: Colors.black,
                               isDense: true,
                               isExpanded: false,
                               iconEnabledColor: Colors.white,
@@ -271,7 +270,8 @@ class _RegisterState extends State<Register> {
                                     child: Text(
                                       'Sign in',
                                       style: TextStyle(
-                                        color: Colors.blue,
+                                        decoration: TextDecoration.underline,
+                                        color: Colors.white,
                                       ),
                                     ),
                                     onTap: () {
