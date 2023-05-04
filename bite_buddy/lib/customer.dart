@@ -19,6 +19,9 @@ class _CustomerState extends State<Customer> {
   }
 
   List menuItems = [];
+
+  final newMenuItems = <String>[];
+
   // getData();
   @override
   Widget build(BuildContext context) {
@@ -93,7 +96,7 @@ class _CustomerState extends State<Customer> {
           title: Text("Customer"),
         ),
         body: ListView.builder(
-          itemCount: menuItems.length,
+          itemCount: newMenuItems.length,
           itemBuilder: (context, index) {
             return Card(
               child: Column(
@@ -101,8 +104,8 @@ class _CustomerState extends State<Customer> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Text(menuItems[index].itemName),
-                      Text(menuItems[index].price.toString()),
+                      Text(newMenuItems[index].split(";")[0]),
+                      Text(newMenuItems[index].split(";")[1]),
                     ],
                   ),
                   const SizedBox(
@@ -222,6 +225,35 @@ class _CustomerState extends State<Customer> {
     menuItems = restOfItems;
     print("AAAB");
     print("zebu: " + menuItems.toString());
+
+    // List<String> newList = List.empty();
+
+    for (var a in menuItems) {
+      // print(a.itemName + " " + a.price);
+      print(a);
+      print("type: " + a.runtimeType.toString());
+
+      String aStr = a.toString();
+
+      String itemNameString = "itemName: ";
+      String itemPriceString = "price: ";
+      String name = aStr.substring(aStr.indexOf(itemNameString) + itemNameString.length, aStr.indexOf(",", aStr.indexOf(itemNameString)));
+      print("item name : " + name);
+
+      String price = aStr.substring(aStr.indexOf(itemPriceString) + itemPriceString.length, aStr.indexOf(",", aStr.indexOf(itemPriceString)));
+      print("item price : " + price);
+
+      newMenuItems.add("${name};${price}");
+
+      // for (var e in a) {
+      //   print(e);
+      // }
+    }
+
+    print(newMenuItems.toString());
+
+
+    // menuItems.forEach((k,v) => print("got key $k with $v"));
   }
 
 
