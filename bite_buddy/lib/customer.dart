@@ -12,15 +12,29 @@ class Customer extends StatefulWidget {
   State<Customer> createState() => _CustomerState();
 }
 
-class _CustomerState extends State<Customer> {
-  List menuItems = [];
+class MenuItem {
+  final String name;
+  final String image;
+  final double price;
 
-  final newMenuItems = <String>[];
+  MenuItem({required this.name, required this.image, required this.price});
+}
+
+class _CustomerState extends State<Customer> {
+  // List menuItems = [];
+
+  final List<MenuItem> menuItems = [
+    MenuItem(name: 'Hamburger', image: 'assets/hamburger.jpg', price: 10.99),
+    MenuItem(name: 'Pizza', image: 'assets/pizza.jpg', price: 12.99),
+    MenuItem(name: 'Sushi', image: 'assets/sushi.jpg', price: 15.99),
+  ];
+
+  // final newMenuItems = <String>[];
 
   // getData();
   @override
   Widget build(BuildContext context) {
-    print("MY BULLSHIT : " + newMenuItems.toString());
+    // print("MY BULLSHIT : " + menuItems.toString());
     return Scaffold(
       drawer: Drawer(
         child: ListView(
@@ -94,165 +108,76 @@ class _CustomerState extends State<Customer> {
       body: FutureBuilder<void>(
         future: getData(),
         builder: (context, snapshot) {
-          return ListView.builder(
-            itemCount: newMenuItems.length,
-            itemBuilder: (context, index) {
+          return GridView.count(
+            crossAxisCount: 2,
+            children: List.generate(menuItems.length, (index) {
               return Card(
                 child: Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Text(newMenuItems[index].split(";")[0]),
-                        Text(newMenuItems[index].split(";")[1]),
-                      ],
+                    // Image.asset(
+                    //   menuItems[index].image,
+                    //   fit: BoxFit.cover,
+                    // ),
+                    Image.network(
+                      menuItems[index].image,
+                      fit: BoxFit.cover,
                     ),
-                    const SizedBox(
-                      height: 20.0,
+                    SizedBox(height: 10),
+                    Text(
+                      menuItems[index].name,
+                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 5),
+                    Text('\$${menuItems[index].price.toStringAsFixed(2)}',
+                      style: TextStyle(fontSize: 16),
                     ),
                   ],
                 ),
               );
-            },
+            }),
           );
-        },
-      ),
+        }
+      )
     );
-
-    // return Scaffold(
-    //   drawer: Drawer(
-    //     child: ListView(
-    //       // Remove padding
-    //       padding: EdgeInsets.zero,
-    //       children: [
-    //         UserAccountsDrawerHeader(
-    //           accountName: Text('Customer'),
-    //           accountEmail: Text('${widget.email}'),
-    //           currentAccountPicture: CircleAvatar(
-    //             child: ClipOval(
-    //               child: Image.network(
-    //                 'https://as1.ftcdn.net/v2/jpg/00/64/67/80/1000_F_64678017_zUpiZFjj04cnLri7oADnyMH0XBYyQghG.jpg',
-    //                 fit: BoxFit.cover,
-    //                 width: 90,
-    //                 height: 90,
-    //               ),
-    //             ),
-    //           ),
-    //           decoration: BoxDecoration(
-    //             color: Colors.blue,
-    //             image: DecorationImage(
-    //                 fit: BoxFit.fill,
-    //                 image: NetworkImage(
-    //                     'https://media1.ledevoir.com/images_galerie/nwl_1475198_1130846/image.jpg')),
-    //           ),
-    //         ),
-    //         ListTile(
-    //           leading: Icon(Icons.favorite),
-    //           title: Text('Favorites'),
-    //           onTap: () => null,
-    //         ),
-    //         ListTile(
-    //           leading: Icon(Icons.person),
-    //           title: Text('Friends'),
-    //           onTap: () => null,
-    //         ),
-    //         ListTile(
-    //           leading: Icon(Icons.share),
-    //           title: Text('Share'),
-    //           onTap: () => null,
-    //         ),
-    //         ListTile(
-    //           leading: Icon(Icons.notifications),
-    //           title: Text('Request'),
-    //         ),
-    //         Divider(),
-    //         ListTile(
-    //           leading: Icon(Icons.settings),
-    //           title: Text('Settings'),
-    //           onTap: () => null,
-    //         ),
-    //         ListTile(
-    //           leading: Icon(Icons.description),
-    //           title: Text('Policies'),
-    //           onTap: () => null,
-    //         ),
-    //         Divider(),
-    //         ListTile(
-    //           title: Text('Logout'),
-    //           leading: Icon(Icons.logout),
-    //           onTap: () => logout(context),
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    //   appBar: AppBar(
-    //     backgroundColor: Colors.redAccent.shade100,
-    //     title: Text("Customer"),
-    //   ),
-    //   body: Center(
-    //     child: Column(
-    //       mainAxisAlignment: MainAxisAlignment.center,
-    //       crossAxisAlignment: CrossAxisAlignment.center,
-    //       children: [
-    //         Text("Customer"),
-    //         ElevatedButton(onPressed: getData, child: Text('suki'))
-    //       ],
-    //     ),
-    //   ),
-    // );
   }
 
-  // List<DataRow> _buildList(BuildContext context, List<DocumentSnapshot> snapshot) {
-  //   return  snapshot.map((data) => _buildListItem(context, data)).toList();
-  // }\
-
-  CollectionReference _collectionRef =
-      FirebaseFirestore.instance.collection('users');
+  // CollectionReference _collectionRef = FirebaseFirestore.instance.collection('users');
 
   Future<void> getData() async {
     CollectionReference _collectionRef2 =
         FirebaseFirestore.instance.collection('menu');
 
-    QuerySnapshot querySnapshot = await _collectionRef.get();
-    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+    // QuerySnapshot querySnapshot = await _collectionRef.get();
+    // final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
 
-    print(allData);
     QuerySnapshot aa = await _collectionRef2.get();
     final restOfItems = aa.docs.map((doc) => doc.data()).toList();
 
-    menuItems = restOfItems;
-    print("AAAB");
-    print("zebu: " + menuItems.toString());
+    for (var item in restOfItems) {
+      String aStr = item.toString();
 
-    // List<String> newList = List.empty();
-
-    for (var a in menuItems) {
-      // print(a.itemName + " " + a.price);
-      print(a);
-      print("type: " + a.runtimeType.toString());
-
-      String aStr = a.toString();
+      print("ITEM: ${aStr}");
 
       String itemNameString = "itemName: ";
       String itemPriceString = "price: ";
+      String imageUrlString = "imageUrl: ";
+
       String name = aStr.substring(
           aStr.indexOf(itemNameString) + itemNameString.length,
           aStr.indexOf(",", aStr.indexOf(itemNameString)));
-      print("item name : " + name);
+      // print("item name : " + name);
 
       String price = aStr.substring(
           aStr.indexOf(itemPriceString) + itemPriceString.length,
           aStr.indexOf(",", aStr.indexOf(itemPriceString)));
-      print("item price : " + price);
 
-      newMenuItems.add("${name};${price}");
+      String imageUrl = aStr.substring(
+          aStr.indexOf(imageUrlString) + imageUrlString.length,
+          aStr.indexOf(",", aStr.indexOf(imageUrlString)));
+      // print("item price : " + price);
 
-      // for (var e in a) {
-      //   print(e);
-      // }
+      menuItems.add(new MenuItem(name: name, image: imageUrl, price: double.parse(price)));
     }
-
-    print(newMenuItems.toString());
 
     // menuItems.forEach((k,v) => print("got key $k with $v"));
   }
