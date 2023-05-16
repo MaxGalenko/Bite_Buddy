@@ -9,7 +9,7 @@ class MenuItem {
 }
 
 class CartItem extends MenuItem {
-  final int quantity;
+  int quantity;
 
   CartItem(
       {required String name,
@@ -22,6 +22,7 @@ class CartItem extends MenuItem {
 
 class CustomerOrder {
   static final CustomerOrder _instance = CustomerOrder._internal();
+  static const int maxAllowedItems = 15;
   List<CartItem> _cartItems = [];
 
   factory CustomerOrder() {
@@ -41,20 +42,32 @@ class CustomerOrder {
   }
 }
 
-class OrderPage extends StatelessWidget {
+class OrderPage extends StatefulWidget  {
+  var order = CustomerOrder();
+
+  // OrderPage({required this.order});
+
+  @override
+  _OrderPageState createState() => _OrderPageState();
+}
+
+class _OrderPageState extends State<OrderPage> {
   @override
   Widget build(BuildContext context) {
-    final order = CustomerOrder();
+    // final order = CustomerOrder();
+    final int maxAllowedItems = CustomerOrder.maxAllowedItems;
 
     double getTotalPrice() {
-      double totalPrice = 0.0;
+      double subTot = 0.0;
 
-      for(CartItem item in order.cartItems) {
-        totalPrice += item.price;
+      for(CartItem item in widget.order.cartItems) {
+        subTot += item.price * item.quantity;
       }
 
-      return totalPrice;
+      return subTot;
     }
+
+    double totalPrice = getTotalPrice();
 
     return Scaffold(
       appBar: AppBar(
@@ -62,17 +75,56 @@ class OrderPage extends StatelessWidget {
         title: Text('Order Summary'),
       ),
       body: ListView.builder(
-        itemCount: order.cartItems.length,
+        itemCount: widget.order.cartItems.length,
         itemBuilder: (BuildContext context, int index) {
-          final item = order.cartItems[index];
+          CartItem item = widget.order.cartItems[index];
           return ListTile(
             leading: Image.network(item.image),
             title: Text(item.name),
             subtitle: Text('Price: \$${item.price.toStringAsFixed(2)} x ${item.quantity}'),
-            trailing: Text('\$${(item.price * item.quantity).toStringAsFixed(2)}'),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () {
+                    setState(() {
+                      if (item.quantity < maxAllowedItems) {
+                        item.quantity++;
+                        getTotalPrice();
+                      }
+                    });
+                  },
+                ),
+                Text('\$${(item.price * item.quantity).toStringAsFixed(2)}'),
+                IconButton(
+                  icon: Icon(Icons.remove),
+                  onPressed: () {
+                    setState(() {
+                      if (item.quantity > 0) {
+                        item.quantity--;
+                        getTotalPrice();
+                      }
+                    });
+                  },
+                ),
+              ],
+            ),
           );
         },
       ),
+      // body: ListView.builder(
+      //   itemCount: order.cartItems.length,
+      //   itemBuilder: (BuildContext context, int index) {
+      //     final item = order.cartItems[index];
+      //     return ListTile(
+      //       leading: Image.network(item.image),
+      //       title: Text(item.name),
+      //       subtitle: Text('Price: \$${item.price.toStringAsFixed(2)} x ${item.quantity}'),
+      //       trailing: Text('\$${(item.price * item.quantity).toStringAsFixed(2)}'),
+      //     );
+      //   },
+      // ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ElevatedButton(
@@ -82,7 +134,7 @@ class OrderPage extends StatelessWidget {
             print('Pay button pressed!');
           },
           child: Text(
-            'Pay \$${getTotalPrice().toStringAsFixed(2)}',
+            'Pay \$${totalPrice.toStringAsFixed(2)}',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,

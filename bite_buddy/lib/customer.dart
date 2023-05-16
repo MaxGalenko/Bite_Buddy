@@ -43,6 +43,10 @@ class _CustomerState extends State<Customer> {
             keyboardType: TextInputType.number,
             onChanged: (value) {
               quantity = int.tryParse(value) ?? 1;
+              if (quantity > CustomerOrder.maxAllowedItems) {
+                quantity = CustomerOrder.maxAllowedItems;
+                value = CustomerOrder.maxAllowedItems.toString();
+              }
             },
             decoration: InputDecoration(hintText: 'Quantity'),
           ),
