@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'login.dart';
+import 'admin_register.dart';
+import 'admin.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({Key? key, required this.email}) : super(key: key);
@@ -42,7 +44,7 @@ class _NavBarState extends State<NavBar> {
           ListTile(
             leading: Icon(Icons.menu_book),
             title: Text('Menu'),
-            onTap: () => null,
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => Admin(email: widget.email,))),
           ),
           ListTile(
             leading: Icon(Icons.people),
@@ -52,7 +54,7 @@ class _NavBarState extends State<NavBar> {
           ListTile(
             leading: Icon(Icons.person_add_alt_1),
             title: Text('Register Staff'),
-            onTap: () => null,
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => Register(email: widget.email,))),
           ),
           Divider(),
           ListTile(

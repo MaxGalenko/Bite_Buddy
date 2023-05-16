@@ -3,8 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'login.dart';
+import 'admin_nav_bar.dart';
 
 class Register extends StatefulWidget {
+  const Register({Key? key, required this.email}) : super(key: key);
+  final String email;
+
   @override
   _RegisterState createState() => _RegisterState();
 }
@@ -27,12 +31,21 @@ class _RegisterState extends State<Register> {
   bool _isObscure = true;
   bool _isObscure2 = true;
   File? file;
-  var role = "Customer";
+  var options = [
+    'Admin',
+    'Cook',
+  ];
+  var _currentItemSelected = "Admin";
+  var role = "Admin";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.redAccent.shade100,
+      drawer: NavBar(email: widget.email,),
+      appBar: AppBar(
+        backgroundColor: Colors.redAccent.shade100,
+      ),
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -49,10 +62,10 @@ class _RegisterState extends State<Register> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         SizedBox(
-                          height: 160,
+                          height: 80,
                         ),
                         Text(
-                          "Register Now",
+                          "Register Staff",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -182,6 +195,49 @@ class _RegisterState extends State<Register> {
                             }
                           },
                           onChanged: (value) {},
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "role : ",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            DropdownButton<String>(
+                              dropdownColor: Colors.black,
+                              isDense: true,
+                              isExpanded: false,
+                              iconEnabledColor: Colors.white,
+                              focusColor: Colors.white,
+                              items: options.map((String dropDownStringItem) {
+                                return DropdownMenuItem<String>(
+                                  value: dropDownStringItem,
+                                  child: Text(
+                                    dropDownStringItem,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20,
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                              onChanged: (newValueSelected) {
+                                setState(() {
+                                  _currentItemSelected = newValueSelected!;
+                                  role = newValueSelected;
+                                });
+                              },
+                              value: _currentItemSelected,
+                            ),
+                          ],
                         ),
                         SizedBox(
                           height: 20,
