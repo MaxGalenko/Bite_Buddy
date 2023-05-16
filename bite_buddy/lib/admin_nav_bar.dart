@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'login.dart';
 import 'admin_register.dart';
 import 'admin.dart';
+import 'admin_staff_management.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({Key? key, required this.email}) : super(key: key);
@@ -49,7 +50,7 @@ class _NavBarState extends State<NavBar> {
           ListTile(
             leading: Icon(Icons.people),
             title: Text('Staff'),
-            onTap: () => null,
+            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => Staff(email: widget.email,))),
           ),
           ListTile(
             leading: Icon(Icons.person_add_alt_1),
