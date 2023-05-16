@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'login.dart';
-import 'admin_register.dart';
 import 'admin.dart';
 import 'admin_staff_management.dart';
+import 'admin_register.dart';
+import 'login.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({Key? key, required this.email}) : super(key: key);
