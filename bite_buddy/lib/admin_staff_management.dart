@@ -60,40 +60,44 @@ class StaffList extends StatelessWidget {
                           builder: (BuildContext context, StateSetter setState) {
                             return AlertDialog(
                               title: Text("Update Dialog"),
-                              content: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Text(
-                                    "Email: ",
-                                    textAlign: TextAlign.start,
-                                  ),
-                                  TextField(
-                                    controller: emailController,
-                                    decoration: InputDecoration(
-                                      hintText: document['email'],
+                              content: Container(
+                                height: 200,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text(
+                                      "Email: ",
+                                      textAlign: TextAlign.start,
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(top: 20),
-                                    child: Text("Role: "),
-                                  ),
-                                  DropdownButton<String>(
-                                    value: selectedRole,
-                                    onChanged: (String? newValue) {
-                                      setState(() {
-                                        selectedRole = newValue!;
-                                      });
-                                    },
-                                    items: <String>['Admin', 'Cook']
-                                        .map<DropdownMenuItem<String>>((String value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value,
-                                        child: Text(value),
-                                      );
-                                    }).toList(),
-                                  ),
-                                ],
+                                    TextField(
+                                      controller: emailController,
+                                      decoration: InputDecoration(
+                                        hintText: document['email'],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: EdgeInsets.only(top: 20),
+                                      child: Text("Role: "),
+                                    ),
+                                    DropdownButton<String>(
+                                      value: selectedRole,
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          selectedRole = newValue!;
+                                        });
+                                      },
+                                      items: <String>['Admin', 'Cook']
+                                          .map<DropdownMenuItem<String>>((String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ],
+                                ),
                               ),
+
                               actions: <Widget>[
                                 Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 10),
