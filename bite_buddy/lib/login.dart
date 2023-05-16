@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'admin.dart';
 import 'customer.dart';
 import 'cook.dart';
-import 'register.dart';
+import 'customer_register.dart';
 
 class LoginPage extends StatefulWidget {
   @override

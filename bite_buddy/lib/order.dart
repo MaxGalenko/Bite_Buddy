@@ -58,6 +58,7 @@ class OrderPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.redAccent.shade100,
         title: Text('Order Summary'),
       ),
       body: ListView.builder(
@@ -75,6 +76,7 @@ class OrderPage extends StatelessWidget {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ElevatedButton(
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent.shade100,),
           onPressed: () {
             // Handle the pay button press
             print('Pay button pressed!');
