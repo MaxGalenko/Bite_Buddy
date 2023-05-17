@@ -97,7 +97,6 @@ class StaffList extends StatelessWidget {
                                   ],
                                 ),
                               ),
-
                               actions: <Widget>[
                                 Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 10),
