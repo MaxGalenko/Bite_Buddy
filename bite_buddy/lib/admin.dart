@@ -1,9 +1,6 @@
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'login.dart';
 import 'admin_nav_bar.dart';
 
 class Admin extends StatefulWidget {
@@ -489,14 +486,38 @@ class MenuList extends StatelessWidget {
                       subtitle: Text("Image Url: ${document['imageUrl']}"),
                       trailing: InkWell(
                         onTap: () {
-                          // TODO: Firestore delete a record code
-                          FirebaseFirestore.instance
-                              .collection("menu")
-                              .doc(document.id)
-                              .delete()
-                              .catchError((e) {
-                            print(e);
-                          });
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text("Confirmation"),
+                                content: Text("Are you sure you want to delete the following menu item?\n\n ${document['itemName']}"),
+                                actions: <Widget>[
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text("Cancel"),
+                                    style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent.shade100,),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      FirebaseFirestore.instance
+                                          .collection("users")
+                                          .doc(document.id)
+                                          .delete()
+                                          .catchError((e) {
+                                        print(e);
+                                      });
+                                      Navigator.of(context).pop();
+                                    },
+                                    child: Text("Delete"),
+                                    style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent.shade100,),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         },
                         child: Padding(
                           padding: EdgeInsets.symmetric(
