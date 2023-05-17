@@ -278,7 +278,7 @@ class MenuList extends StatelessWidget {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: Text("Update Dialog"),
+                              title: Text("Update Menu Item"),
                               content: Container(
                                 height: 350,
                                 child: Form(
