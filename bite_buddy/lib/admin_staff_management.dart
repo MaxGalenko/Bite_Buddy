@@ -24,13 +24,14 @@ class _StaffState extends State<Staff> {
         backgroundColor: Colors.redAccent.shade100,
         title: Text("Staff"),
       ),
-      body: StaffList(),
+      body: StaffList(email: widget.email,),
     );
   }
 }
 
 class StaffList extends StatelessWidget {
-  StaffList({Key? key}) : super(key: key);
+  StaffList({Key? key, required this.email}) : super(key: key);
+  final String email;
 
   @override
   Widget build(BuildContext context) {
@@ -48,15 +49,22 @@ class StaffList extends StatelessWidget {
           itemBuilder: (BuildContext context, int index) {
             final document = userDocs[index];
             TextEditingController emailController =
-                TextEditingController(text: document['email']);
+            TextEditingController(text: document['email']);
             String selectedRole = document['role'];
             String undoRole =
                 selectedRole; // Store the original role before any changes
+
+            // Check if the document's email matches the current user's email
+            final isCurrentUserEmail = document['email'] == email;
+
             return Padding(
               padding: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
               child: Card(
                 child: ListTile(
                   onTap: () {
+                    // Skip editing if it's the current user's email
+                    if (isCurrentUserEmail) return;
+
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -74,19 +82,11 @@ class StaffList extends StatelessWidget {
                                       "Email: ",
                                       textAlign: TextAlign.start,
                                     ),
-                                    TextFormField(
-                                      controller: emailController,
-                                      decoration: InputDecoration(
-                                        hintText: document['email'],
-                                      ),
-                                      validator: (value) {
-                                        final emailRegex = RegExp(
-                                            r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]+$');
-                                        if (!emailRegex.hasMatch(value!)) {
-                                          return 'Please enter a valid email address.';
-                                        }
-                                        return null;
-                                      },
+                                    SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      document['email'],
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(top: 20),
@@ -102,11 +102,11 @@ class StaffList extends StatelessWidget {
                                       items: <String>['Admin', 'Cook']
                                           .map<DropdownMenuItem<String>>(
                                               (String value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value,
-                                          child: Text(value),
-                                        );
-                                      }).toList(),
+                                            return DropdownMenuItem<String>(
+                                              value: value,
+                                              child: Text(value),
+                                            );
+                                          }).toList(),
                                     ),
                                   ],
                                 ),
@@ -128,7 +128,7 @@ class StaffList extends StatelessWidget {
                                     ),
                                     style: ElevatedButton.styleFrom(
                                       backgroundColor:
-                                          Colors.redAccent.shade100,
+                                      Colors.redAccent.shade100,
                                     ),
                                   ),
                                 ),
@@ -168,22 +168,48 @@ class StaffList extends StatelessWidget {
                     style: TextStyle(color: Colors.black),
                   ),
                   subtitle: Text("Role " + document['role']),
-                  trailing: InkWell(
+                  trailing: !isCurrentUserEmail
+                      ? InkWell(
                     onTap: () {
-                      FirebaseFirestore.instance
-                          .collection("users")
-                          .doc(document.id)
-                          .delete()
-                          .catchError((e) {
-                        print(e);
-                      });
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("Confirmation"),
+                            content: Text("Are you sure you want to delete the following user?\n\n ${document['email']}"),
+                            actions: <Widget>[
+                              ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text("Cancel"),
+                                style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent.shade100,),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  FirebaseFirestore.instance
+                                      .collection("users")
+                                      .doc(document.id)
+                                      .delete()
+                                      .catchError((e) {
+                                    print(e);
+                                  });
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text("Delete"),
+                                style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent.shade100,),
+                              ),
+                            ],
+                          );
+                        },
+                      );
                     },
                     child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                       child: Icon(Icons.delete),
                     ),
-                  ),
+                  )
+                      : null, // Hide the delete option for the current user's email
                 ),
               ),
             );

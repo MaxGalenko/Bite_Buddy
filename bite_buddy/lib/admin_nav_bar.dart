@@ -45,17 +45,32 @@ class _NavBarState extends State<NavBar> {
           ListTile(
             leading: Icon(Icons.menu_book),
             title: Text('Menu'),
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => Admin(email: widget.email,))),
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => Admin(
+                          email: widget.email,
+                        ))),
           ),
           ListTile(
             leading: Icon(Icons.people),
             title: Text('Staff'),
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => Staff(email: widget.email,))),
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => Staff(
+                          email: widget.email,
+                        ))),
           ),
           ListTile(
             leading: Icon(Icons.person_add_alt_1),
             title: Text('Register Staff'),
-            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_) => Register(email: widget.email,))),
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => Register(
+                          email: widget.email,
+                        ))),
           ),
           Divider(),
           ListTile(
