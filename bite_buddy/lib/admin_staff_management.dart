@@ -39,15 +39,19 @@ class StaffList extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) return Text('Error: ${snapshot.error}');
         if (!snapshot.hasData) return CircularProgressIndicator();
-        final userDocs = snapshot.data!.docs.where((document) => document['role'] != 'Customer').toList();
+        final userDocs = snapshot.data!.docs
+            .where((document) => document['role'] != 'Customer')
+            .toList();
         return ListView.builder(
           padding: EdgeInsets.only(bottom: 80),
           itemCount: userDocs.length,
           itemBuilder: (BuildContext context, int index) {
             final document = userDocs[index];
-            TextEditingController emailController = TextEditingController(text: document['email']);
+            TextEditingController emailController =
+                TextEditingController(text: document['email']);
             String selectedRole = document['role'];
-            String undoRole = selectedRole; // Store the original role before any changes
+            String undoRole =
+                selectedRole; // Store the original role before any changes
             return Padding(
               padding: EdgeInsets.symmetric(vertical: 3, horizontal: 10),
               child: Card(
@@ -57,7 +61,8 @@ class StaffList extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return StatefulBuilder(
-                          builder: (BuildContext context, StateSetter setState) {
+                          builder:
+                              (BuildContext context, StateSetter setState) {
                             return AlertDialog(
                               title: Text("Update Dialog"),
                               content: Container(
@@ -69,11 +74,19 @@ class StaffList extends StatelessWidget {
                                       "Email: ",
                                       textAlign: TextAlign.start,
                                     ),
-                                    TextField(
+                                    TextFormField(
                                       controller: emailController,
                                       decoration: InputDecoration(
                                         hintText: document['email'],
                                       ),
+                                      validator: (value) {
+                                        final emailRegex = RegExp(
+                                            r'^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+\.[a-z]+$');
+                                        if (!emailRegex.hasMatch(value!)) {
+                                          return 'Please enter a valid email address.';
+                                        }
+                                        return null;
+                                      },
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(top: 20),
@@ -87,7 +100,8 @@ class StaffList extends StatelessWidget {
                                         });
                                       },
                                       items: <String>['Admin', 'Cook']
-                                          .map<DropdownMenuItem<String>>((String value) {
+                                          .map<DropdownMenuItem<String>>(
+                                              (String value) {
                                         return DropdownMenuItem<String>(
                                           value: value,
                                           child: Text(value),
@@ -97,7 +111,6 @@ class StaffList extends StatelessWidget {
                                   ],
                                 ),
                               ),
-
                               actions: <Widget>[
                                 Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 10),
@@ -114,7 +127,8 @@ class StaffList extends StatelessWidget {
                                       style: TextStyle(color: Colors.white),
                                     ),
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: Colors.redAccent.shade100,
+                                      backgroundColor:
+                                          Colors.redAccent.shade100,
                                     ),
                                   ),
                                 ),
@@ -149,25 +163,29 @@ class StaffList extends StatelessWidget {
                       },
                     );
                   },
-                  title: Text("Email " + document['email']),
+                  title: Text(
+                    "Email " + document['email'],
+                    style: TextStyle(color: Colors.black),
+                  ),
                   subtitle: Text("Role " + document['role']),
-                      trailing: InkWell(
-                      onTap: () {
-                FirebaseFirestore.instance
-                    .collection("users")
-                    .doc(document.id)
-                    .delete()
-                    .catchError((e) {
-                print(e);
-                });
-                },
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    child: Icon(Icons.delete),
+                  trailing: InkWell(
+                    onTap: () {
+                      FirebaseFirestore.instance
+                          .collection("users")
+                          .doc(document.id)
+                          .delete()
+                          .catchError((e) {
+                        print(e);
+                      });
+                    },
+                    child: Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                      child: Icon(Icons.delete),
+                    ),
                   ),
                 ),
               ),
-            ),
             );
           },
         );
