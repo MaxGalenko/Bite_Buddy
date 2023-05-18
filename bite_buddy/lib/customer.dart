@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'login.dart';
 import 'order.dart';
 import 'customer_nav_bar.dart';
@@ -16,6 +17,11 @@ class Customer extends StatefulWidget {
 
 class _CustomerState extends State<Customer> {
   // List menuItems = [];
+  final TextEditingController itemQuantityController = new TextEditingController(text: "1");
+
+  void resetItemQuantityController() {
+    itemQuantityController.text = "1";
+  }
 
   final List<MenuItem> menuItems = [];
   bool ranGetData = false;
@@ -39,13 +45,14 @@ class _CustomerState extends State<Customer> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Enter Quantity'),
-          content: TextField(
+          content: TextFormField(
+            controller: itemQuantityController,
             keyboardType: TextInputType.number,
             onChanged: (value) {
               quantity = int.tryParse(value) ?? 1;
               if (quantity > CustomerOrder.maxAllowedItems) {
                 quantity = CustomerOrder.maxAllowedItems;
-                value = CustomerOrder.maxAllowedItems.toString();
+                itemQuantityController.text = CustomerOrder.maxAllowedItems.toString();
               }
             },
             decoration: InputDecoration(hintText: 'Quantity'),
@@ -61,6 +68,7 @@ class _CustomerState extends State<Customer> {
               child: Text('Add to Cart'),
               onPressed: () {
                 addToCart(item, quantity);
+                resetItemQuantityController();
               },
             ),
           ],
@@ -214,10 +222,6 @@ class _CustomerState extends State<Customer> {
         child: const Icon(Icons.shopping_cart),
       ),
     );
-  }
-
-  void emptyFunc() {
-    print("asd");
   }
 
   // CollectionReference _collectionRef = FirebaseFirestore.instance.collection('users');
