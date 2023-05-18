@@ -24,20 +24,17 @@ class CustomerOrder {
   static const int maxAllowedItems = 15;
   static List<CustomerOrder> _allOrders = [];
 
-  String userEmail;
-  List<CartItem> _cartItems = [];
+  String userEmail = "";
+  List<CartItem> cartItems = [];
 
-  CustomerOrder({required this.userEmail});
-
-
-  List<CartItem> get cartItems => _cartItems;
+  CustomerOrder({required this.userEmail, required this.cartItems});
 
   void addCartItem(CartItem item) {
-    _cartItems.add(item);
+    cartItems.add(item);
   }
 
   void removeCartItem(CartItem item) {
-    _cartItems.remove(item);
+    cartItems.remove(item);
   }
 
   static CustomerOrder getCustomerOrder(String inputUserEmail) {
@@ -46,7 +43,7 @@ class CustomerOrder {
         return order;
       }
     }
-    return new CustomerOrder(userEmail: inputUserEmail);
+    return CustomerOrder(userEmail: inputUserEmail, cartItems: []);
   }
 }
 
