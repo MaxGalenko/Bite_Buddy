@@ -15,17 +15,17 @@ class CartItem extends MenuItem {
 
   CartItem(
       {required String name,
-        required String image,
-        required double price,
-        required int this.quantity})
+      required String image,
+      required double price,
+      required int this.quantity})
       : super(name: name, image: image, price: price);
 }
 
-
 class CustomerOrder {
   static const int maxAllowedItems = 15;
-  static List<CustomerOrder> _allOrders = [];
+  static List<CustomerOrder> allOrders = [];
 
+  String status = "Sent";
   String userEmail = "";
   List<CartItem> cartItems = [];
 
@@ -40,7 +40,7 @@ class CustomerOrder {
   }
 
   static CustomerOrder getCustomerOrder(String inputUserEmail) {
-    for(CustomerOrder order in CustomerOrder._allOrders) {
+    for (CustomerOrder order in CustomerOrder.allOrders) {
       if (order.userEmail == inputUserEmail) {
         return order;
       }
@@ -49,12 +49,12 @@ class CustomerOrder {
   }
 }
 
-class OrderPage extends StatefulWidget  {
+class OrderPage extends StatefulWidget {
   const OrderPage({Key? key, required this.order}) : super(key: key);
+
   // final String email;
   // final List<CartItem> cartItems;
   final CustomerOrder order;
-
 
   // OrderPage({required this.order});
 
@@ -65,17 +65,17 @@ class OrderPage extends StatefulWidget  {
 class _OrderPageState extends State<OrderPage> {
   @override
   Widget build(BuildContext context) {
-    print("received: ${widget.order.cartItems.length}"); // ${widget.order.cartItems[widget.order.cartItems.length - 1].name}
+    print(
+        "received: ${widget.order.cartItems.length}"); // ${widget.order.cartItems[widget.order.cartItems.length - 1].name}
     // final order = CustomerOrder();
     final int maxAllowedItems = CustomerOrder.maxAllowedItems;
     // var order = CustomerOrder.getCustomerOrder(widget.email);
     // final order = CustomerOrder(userEmail: widget.email, cartItems: this.cartItems);
 
-
     double getTotalPrice() {
       double subTot = 0.0;
 
-      for(CartItem item in widget.order.cartItems) {
+      for (CartItem item in widget.order.cartItems) {
         subTot += item.price * item.quantity;
       }
 
@@ -96,7 +96,8 @@ class _OrderPageState extends State<OrderPage> {
           return ListTile(
             leading: Image.network(item.image),
             title: Text(item.name),
-            subtitle: Text('Price: \$${item.price.toStringAsFixed(2)} x ${item.quantity}'),
+            subtitle: Text(
+                'Price: \$${item.price.toStringAsFixed(2)} x ${item.quantity}'),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -143,13 +144,15 @@ class _OrderPageState extends State<OrderPage> {
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ElevatedButton(
-          style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent.shade100,),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.redAccent.shade100,
+          ),
           onPressed: () {
             // Handle the pay button press
             print('Pay button pressed!');
-            print("aa: ${CustomerOrder._allOrders.length}");
-            CustomerOrder._allOrders.add(widget.order);
-            print("aa: ${CustomerOrder._allOrders.length}");
+            print("aa: ${CustomerOrder.allOrders.length}");
+            CustomerOrder.allOrders.add(widget.order);
+            print("aa: ${CustomerOrder.allOrders.length}");
           },
           child: Text(
             'Pay \$${totalPrice.toStringAsFixed(2)}',
