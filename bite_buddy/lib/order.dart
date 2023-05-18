@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'customer.dart';
+import 'customer_nav_bar.dart';
 
 class MenuItem {
   final String name;
@@ -48,19 +50,27 @@ class CustomerOrder {
 }
 
 class OrderPage extends StatefulWidget  {
-  var order = CustomerOrder();
+  const OrderPage({Key? key, required this.order}) : super(key: key);
+  // final String email;
+  // final List<CartItem> cartItems;
+  final CustomerOrder order;
+
 
   // OrderPage({required this.order});
 
   @override
-  _OrderPageState createState() => _OrderPageState();
+  State<OrderPage> createState() => _OrderPageState();
 }
 
 class _OrderPageState extends State<OrderPage> {
   @override
   Widget build(BuildContext context) {
+    print("received: ${widget.order.cartItems.length}"); // ${widget.order.cartItems[widget.order.cartItems.length - 1].name}
     // final order = CustomerOrder();
     final int maxAllowedItems = CustomerOrder.maxAllowedItems;
+    // var order = CustomerOrder.getCustomerOrder(widget.email);
+    // final order = CustomerOrder(userEmail: widget.email, cartItems: this.cartItems);
+
 
     double getTotalPrice() {
       double subTot = 0.0;
@@ -137,6 +147,9 @@ class _OrderPageState extends State<OrderPage> {
           onPressed: () {
             // Handle the pay button press
             print('Pay button pressed!');
+            print("aa: ${CustomerOrder._allOrders.length}");
+            CustomerOrder._allOrders.add(widget.order);
+            print("aa: ${CustomerOrder._allOrders.length}");
           },
           child: Text(
             'Pay \$${totalPrice.toStringAsFixed(2)}',
