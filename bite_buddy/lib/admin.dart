@@ -123,6 +123,7 @@ class _AdminState extends State<Admin> {
                         //TODO: Firestore create a new record code
 
                         Map<String, dynamic> newMenuItem = {
+                          "id": 0,
                           "itemName": itemNameController.text,
                           "price": double.parse(priceController.text),
                           // Convert string to double
