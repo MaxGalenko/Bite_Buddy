@@ -21,15 +21,14 @@ class CartItem extends MenuItem {
 
 
 class CustomerOrder {
-  static final CustomerOrder _instance = CustomerOrder._internal();
   static const int maxAllowedItems = 15;
+  static List<CustomerOrder> _allOrders = [];
+
+  String userEmail;
   List<CartItem> _cartItems = [];
 
-  factory CustomerOrder() {
-    return _instance;
-  }
+  CustomerOrder({required this.userEmail});
 
-  CustomerOrder._internal();
 
   List<CartItem> get cartItems => _cartItems;
 
