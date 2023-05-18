@@ -504,7 +504,7 @@ class MenuList extends StatelessWidget {
                                   ElevatedButton(
                                     onPressed: () {
                                       FirebaseFirestore.instance
-                                          .collection("users")
+                                          .collection("menu")
                                           .doc(document.id)
                                           .delete()
                                           .catchError((e) {
