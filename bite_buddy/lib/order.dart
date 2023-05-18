@@ -39,6 +39,15 @@ class CustomerOrder {
   void removeCartItem(CartItem item) {
     _cartItems.remove(item);
   }
+
+  static CustomerOrder getCustomerOrder(String inputUserEmail) {
+    for(CustomerOrder order in CustomerOrder._allOrders) {
+      if (order.userEmail == inputUserEmail) {
+        return order;
+      }
+    }
+    return new CustomerOrder(userEmail: inputUserEmail);
+  }
 }
 
 class OrderPage extends StatefulWidget  {
