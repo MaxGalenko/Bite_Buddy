@@ -160,6 +160,16 @@ class _CookState extends State<Cook> {
                     width: 50,
                   ),
                   Text("Status: ${customerOrder.status}"),
+                  SizedBox(
+                    width: 50,
+                  ),
+                  ElevatedButton(onPressed: () => setState(() {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text("Order complete! Waiter has been notified"),
+                    ));
+
+                    CustomerOrder.allOrders.remove(customerOrder);
+                  }), child: Text("Ready"))
                   // Expanded(
                   //   child: Image.asset(
                   //     customerOrder.cartItems[index].image,

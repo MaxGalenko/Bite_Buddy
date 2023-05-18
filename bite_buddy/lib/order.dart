@@ -47,6 +47,10 @@ class CustomerOrder {
     }
     return CustomerOrder(userEmail: inputUserEmail, cartItems: []);
   }
+
+  void resetList() {
+    cartItems = [];
+  }
 }
 
 class OrderPage extends StatefulWidget {
@@ -129,18 +133,6 @@ class _OrderPageState extends State<OrderPage> {
           );
         },
       ),
-      // body: ListView.builder(
-      //   itemCount: order.cartItems.length,
-      //   itemBuilder: (BuildContext context, int index) {
-      //     final item = order.cartItems[index];
-      //     return ListTile(
-      //       leading: Image.network(item.image),
-      //       title: Text(item.name),
-      //       subtitle: Text('Price: \$${item.price.toStringAsFixed(2)} x ${item.quantity}'),
-      //       trailing: Text('\$${(item.price * item.quantity).toStringAsFixed(2)}'),
-      //     );
-      //   },
-      // ),
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.all(8.0),
         child: ElevatedButton(
@@ -151,8 +143,20 @@ class _OrderPageState extends State<OrderPage> {
             // Handle the pay button press
             print('Pay button pressed!');
             print("aa: ${CustomerOrder.allOrders.length}");
-            CustomerOrder.allOrders.add(widget.order);
+
+
+            CustomerOrder newOrder = CustomerOrder(userEmail: widget.order.userEmail, cartItems: List.of(widget.order.cartItems));
+            CustomerOrder.allOrders.add(newOrder);
+
             print("aa: ${CustomerOrder.allOrders.length}");
+
+            widget.order.resetList();
+
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text("Order has been sent! Thank you!"),
+            ));
+
+            Navigator.of(context).pop();
           },
           child: Text(
             'Pay \$${totalPrice.toStringAsFixed(2)}',

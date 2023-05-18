@@ -73,6 +73,10 @@ class _CustomerState extends State<Customer> {
   @override
   Widget build(BuildContext context) {
 
+    void resetCustomerOrder() {
+      customerOrder = CustomerOrder(userEmail: widget.email, cartItems: []);
+    }
+
     void addToCart(MenuItem menuItem, int quantity) {
       final cartItem = CartItem(
           name: menuItem.name,
